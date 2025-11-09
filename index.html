@@ -5,8 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Events Management App</title>
     <link rel="stylesheet" href="style.css">
+    <script src="eventify.js" defer></script>
 </head>
-<!-- <a href=""></a> -->
+
 <body>
     <div class="app">
         <!-- SIDEBAR -->
@@ -18,22 +19,22 @@
 
             <nav class="sidebar__nav">
                 <!-- Screen buttons (students will add JS to handle click + switch screens) -->
-                <button class="sidebar__btn is-active" data-screen="stats">
+                <button class="sidebar__btn is-active" data-screen="stats" onclick="switchScreen(this)">
                     <span class="sidebar__icon">📊</span>
                     <span class="sidebar__label">Statistics</span>
                 </button>
 
-                <button class="sidebar__btn" data-screen="add">
+                <button class="sidebar__btn" data-screen="add" onclick="switchScreen(this)">
                     <span class="sidebar__icon">➕</span>
                     <span class="sidebar__label">Add Event</span>
                 </button>
 
-                <button class="sidebar__btn" data-screen="list">
+                <button class="sidebar__btn" data-screen="list" onclick="switchScreen(this)">
                     <span class="sidebar__icon">📋</span>
                     <span class="sidebar__label">Events</span>
                 </button>
 
-                <button class="sidebar__btn" data-screen="archive">
+                <button class="sidebar__btn" data-screen="archive" onclick="switchScreen(this)">
                     <span class="sidebar__icon">🗄️</span>
                     <span class="sidebar__label">Archive</span>
                 </button>
@@ -148,7 +149,7 @@
                                     class="input" 
                                     placeholder="50.00"
                                     min="0"
-                                    step="0.01"
+                                    step="5"
                                     required
                                 >
                             </div>
@@ -163,7 +164,7 @@
                                 <!-- Variant rows will be appended here by JS -->
                                 <div id="variants-list" class="variants__list">
                                     <!-- EXAMPLE: Students should clone this structure -->
-                                    <!-- 
+                                     
                                     <div class="variant-row">
                                         <input type="text" class="input variant-row__name" placeholder="Variant name (e.g., 'Early Bird')" />
                                         <input type="number" class="input variant-row__qty" placeholder="Qty" min="1" />
@@ -174,7 +175,7 @@
                                         </select>
                                         <button type="button" class="btn btn--danger btn--small variant-row__remove">Remove</button>
                                     </div>
-                                    -->
+
                                 </div>
                             </fieldset>
 
