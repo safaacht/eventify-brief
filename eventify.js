@@ -43,9 +43,11 @@ function handleFormSubmit(e) {
 };
   
   events.push(newEvent);
+
+  const convert=JSON.stringify(events);
+  localStorage.setItem(events,convert)
+
   console.log("✅ Event created:", newEvent);
-
-
 
 // reseting the form
   e.target.reset();
