@@ -30,6 +30,23 @@ function handleFormSubmit(e) {
   errorBox.classList.add("is-hidden");
   errorBox.innerHTML = "";
 
+
+// addint new object 
+  const newEvent={
+    id: events.length + 1,
+    title,
+    image,
+    description,
+    seats,
+    price,
+    variants: []   
+};
+  
+  events.push(newEvent);
+  console.log("✅ Event created:", newEvent);
+
+
+
 // reseting the form
   e.target.reset();
 }
