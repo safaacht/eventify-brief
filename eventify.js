@@ -150,3 +150,9 @@ function removeVariantRow(button) {
 }
 
 document.getElementById('btn-add-variant').addEventListener('click', addVariantRow);
+
+
+
+// ============================================
+//       EVENTS LIST SCREEN
+// ============================================
