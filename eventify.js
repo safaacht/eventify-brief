@@ -2,7 +2,7 @@
 // ============================================
 //          ADD EVENT FORM
 // ============================================
-
+let events = [];
 function handleFormSubmit(e) {
   e.preventDefault();
 
@@ -18,6 +18,8 @@ function handleFormSubmit(e) {
   if (!title) errors.push("Event title is required.");
   if (isNaN(seats) || seats <= 0) errors.push("Seats must be a positive number.");
   if (isNaN(price) || price < 50) errors.push("Price must be  upper than 50.");
+  if (!description) errors.push("Event description is required.");
+
 
   // showing errors if there is any
   if (errors.length > 0) {
