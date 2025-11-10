@@ -84,8 +84,8 @@ const variants = [];
 
 for(let i=0; i<variantRows.length; i++){
     const row=variantRows[i];
-    const name=row.querySelector(".variant-name").value.trim();
-    const price = parseFloat(row.querySelector(".variant-price").value) || 0;
+    const name=row.querySelector(".variant-row__name").value.trim();
+    const price = parseFloat(row.querySelector(".variant-row__value").value) || 0;
 
     variants.push({name,price});
 }
@@ -132,10 +132,21 @@ function addVariantRow(){
     const inputs = newRow.querySelectorAll('input');
     inputs.forEach(input => input.value = '');    // clearing the inputs
 
+    // adding a remove button
+    const removeBtn=newRow.querySelector(".variant-row__remove");
+    if(removeBtn){
+        removeBtn.addEventListener("click",()=>removeVariantRow(removeBtn))
+    }
+
+
     variantList.appendChild(newRow);
 
 }
 
 // removing variant row
+function removeVariantRow(button) {
+    const row=button.closest('.variant-row');
+    if(row) row.remove();
+}
 
 document.getElementById('btn-add-variant').addEventListener('click', addVariantRow);
