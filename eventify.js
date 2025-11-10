@@ -57,5 +57,5 @@ function handleFormSubmit(e) {
 
 document.getElementById('event-form').addEventListener('submit', handleFormSubmit)
 
-
+// adding variants
 
