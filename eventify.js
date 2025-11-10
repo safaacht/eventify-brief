@@ -50,7 +50,7 @@ function handleFormSubmit(e) {
   console.log("✅ Event created:", newEvent);
 
 // reseting the form
-  e.target.reset();
+  e.target.reset()
 }
 
 document.getElementById('event-form').addEventListener('submit', handleFormSubmit)
