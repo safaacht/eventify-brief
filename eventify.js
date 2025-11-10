@@ -132,7 +132,7 @@ function addVariantRow(){
     const inputs = newRow.querySelectorAll('input');
     inputs.forEach(input => input.value = '');    // clearing the inputs
 
-    
+    variantList.appendChild(newRow);
 
 }
 
