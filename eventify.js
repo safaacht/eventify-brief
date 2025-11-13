@@ -316,7 +316,55 @@ function showDetails(eventId){
     if(clicked.dataset.action==="close-modal" || clicked.classList.contains("modal__overlay")){
       modal.classList.add('is-hidden');
     }
-  })
+  });
 
 
 }
+
+
+function editEvent(eventId){
+  const id=parseInt(eventId);
+  let event=null;
+
+  // looking for the event by its id
+  for (let i = 0; i < events.length; i++) {
+    if (events[i].id === id) {
+      event = events[i];
+      break;
+  }
+ } 
+  if(!event) return alert("Event not found!!!!");
+
+  document.getElementById("event-title").value=event.title;
+  document.getElementById("event-description").value = event.description; 
+  document.getElementById("event-seats").value=event.seats;
+  document.getElementById("event-price").value=event.price;
+  document.querySelector(".variant-row").value=event.variantRows;
+  
+  // fonction qui affiche les modifs
+  switchScreen("add"); 
+
+  const form=document.getElementById("event-form");
+  form.onsubmit=function(e){
+    e.preventDefault;
+
+// updating infos
+    event.title = document.getElementById("event-title").value;
+    event.description=document.getElementById("event-description").value;
+    event.seats=document.getElementById("event-seats").value;
+    event.price=document.getElementById("event-price").value;
+    event.variantRows=document.querySelector(".variant-row").value;
+
+    alert("Infos had been updated succesfully!");
+    renderEventsTable(events);
+    switchScreen("liste");   // revenir a la list
+    
+
+  }
+
+}
+
+
+// function archiveEvent(eventId) {
+  
+// }
