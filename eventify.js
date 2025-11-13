@@ -211,39 +211,112 @@ document.addEventListener('DOMContentLoaded',()=>{
 })
 
 
-function renderPagination(totalItems, currentPage, perPage){
+// function renderPagination(totalItems, currentPage, perPage){
 
-  let totalPages=parseInt(totalItems/perPage);
-  if(totalItems%perPage!==0) totalPages++;   // 23%10=3 donc +1page
+//   let totalPages=parseInt(totalItems/perPage);
+//   if(totalItems%perPage!==0) totalPages++;   // 23%10=3 donc +1page
 
-  const pagination=document.getElementById('events-pagination');
-  pagination.innerHTML='' 
+//   const pagination=document.getElementById('events-pagination');
+//   pagination.innerHTML='' 
 
-  // previous button
-  const prevBtn=document.createElement('button');
-  prevBtn.textContent="Prev";
-  prevBtn.disabled = currentPage === 1;    // disactivation du btn si on est ds la 1er page
-  prevBtn.classList.toggle('is-disabled',currentPage===1);
-  prevBtn.addEventListener("click",()=>{
-    if(currentPage>1) renderEventsTable(events,currentPage-1,perPage);
+  // // previous button
+  // const prevBtn=document.createElement('button');
+  // prevBtn.textContent="Prev";
+  // prevBtn.disabled = currentPage === 1;    // disactivation du btn si on est ds la 1er page
+  // prevBtn.classList.toggle('is-disabled',currentPage===1);
+  // prevBtn.addEventListener("click",()=>{
+  //   if(currentPage>1) renderEventsTable(events,currentPage-1,perPage);
+  // })
+  // pagination.appendChild(prevBtn);
+
+
+
+  // // next button
+  // const nextBtn=document.createElement('button');
+  // nextBtn.textContent="Next";
+  // nextBtn.disabled = currentPage === totalPages;  
+  // nextBtn.classList.toggle('is-disabled',currentPage===totalPages);
+  // nextBtn.addEventListener('click',()=>{
+  //   if(currentPage<totalPages) renderEventsTable(events,currentPage+1,perPage);
+  // })
+  // pagination.appendChild(nextBtn)
+
+  // // num buttons
+  // for (let i = 1; i <= totalPages; i++) {
+  //   const btn = document.createElement("button");
+  //   btn.textContent = i;
+  //   btn.classList.toggle("is-active", i === currentPage);
+  //   btn.addEventListener("click", () => renderEventsTable(events, i, perPage));
+  //   pagination.appendChild(btn);
+  // }
+// }
+
+function handleTableActionClick(e){
+  // Checking if e.target is [data-action]
+  const actionBtn=e.target.closest('[data-action]');
+  if(!actionBtn) return;  // return if it's not an action btn
+
+  const action=actionBtn.getAttribute('data-action');
+
+  // recuperation de l’id d'evenement
+  const eventId=actionBtn.closest('[data-event-id]')?.getAttribute('data-event-id'); 
+  
+  if (action === 'details') {
+    showDetails(eventId);
+   } 
+   else if (action === 'edit') {
+    editEvent(eventId);
+   } 
+   else if (action === 'delete') {
+    archiveEvent(eventId);
+  }
+  
+}
+ document.getElementById('events-table').addEventListener('click', handleTableActionClick)
+
+function showDetails(eventId){
+  const id=parseInt(eventId);
+  let event=null;
+
+  // looking for the event by its id
+  for (let i = 0; i < events.length; i++) {
+    if (events[i].id === id) {
+      event = events[i];
+      break;
+  }
+ } 
+  if(!event) return alert("Event not found!!!!");
+
+  // remplissage du modale par son contenu
+  const modalBody = document.getElementById("modal-body");
+  console.log("yes")
+  console.log(event)
+  modalBody.innerHTML=`
+  <h3>${event.title}</h3>
+  <p><strong>Description :</strong> ${event.description}</p>
+  <p><strong>Price :</strong> ${event.price}</p>
+  <p><strong>Seats :</strong> ${event.seats}</p>
+  <p><strong>Variant :</strong> ${event.variants.length} ${
+      event.variants && event.variants.length > 0
+        ? "<ul>" + event.variants.map(v => `<li> <b>Name:</b>${v.name} <b>Qty:</b>${v.qty} <b>Value:$</b>${v.value} (${v.type})</li>`).join("") + "</ul>"
+        : "No variants"
+    }</p>
+  `;
+
+  // affichage du modal
+
+  const modal=document.getElementById("event-modal");
+  modal.classList.remove("is-hidden");
+
+
+  // fermeture de modale
+  modal.addEventListener("click",function(e){
+    const clicked=e.target;
+
+    if(clicked.dataset.action==="close-modal" || clicked.classList.contains("modal__overlay")){
+      modal.classList.add('is-hidden');
+    }
   })
-  pagination.appendChild(prevBtn);
 
 
-
-  // next button
-  const nextBtn=document.createElement('button');
-  nextBtn.textContent="Next";
-  nextBtn.disabled = currentPage === totalPages;  
-  nextBtn.classList.toggle('is-disabled',currentPage===totalPages);
-  nextBtn.addEventListener('click',()=>{
-    if(currentPage<totalPages) renderEventsTable(events,currentPage+1,perPage);
-  })
-  pagination.appendChild(nextBtn)
-
-
-
-
-
-  // num buttons
 }
