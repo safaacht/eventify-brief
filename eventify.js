@@ -113,6 +113,7 @@ for(let i=0; i<variantRows.length; i++){
   localStorage.setItem('events',convert);
 
   console.log("✅ Event created:", newEvent);
+
   // reseting the form
   e.target.reset();
  
@@ -165,6 +166,8 @@ document.getElementById('btn-add-variant').addEventListener('click', addVariantR
 //       EVENTS LIST SCREEN
 // ============================================
 
+// affichage des événements avec pagination
+
 function renderEventsTable(eventList,page = 1, perPage = 10) {
   const tbody = document.querySelector('#events-table tbody');
   tbody.innerHTML = '';    // to clear previous rows
@@ -182,7 +185,7 @@ console.log(paginatedEvents)
   paginatedEvents.forEach((event, index) => {
     const tr = document.createElement('tr');
     tr.classList.add('table__row');
-    tr.dataset.eventId = event.id;      // storing the event’s ID in the DOM
+    tr.dataset.eventId = event.id;      // storing the event’s id in the DOM
     tr.innerHTML += `
       <td>${start + index + 1}</td>
       <td>${event.title}</td>
@@ -207,3 +210,40 @@ document.addEventListener('DOMContentLoaded',()=>{
   renderEventsTable(events)
 })
 
+
+function renderPagination(totalItems, currentPage, perPage){
+
+  let totalPages=parseInt(totalItems/perPage);
+  if(totalItems%perPage!==0) totalPages++;   // 23%10=3 donc +1page
+
+  const pagination=document.getElementById('events-pagination');
+  pagination.innerHTML='' 
+
+  // previous button
+  const prevBtn=document.createElement('button');
+  prevBtn.textContent="Prev";
+  prevBtn.disabled = currentPage === 1;    // disactivation du btn si on est ds la 1er page
+  prevBtn.classList.toggle('is-disabled',currentPage===1);
+  prevBtn.addEventListener("click",()=>{
+    if(currentPage>1) renderEventsTable(events,currentPage-1,perPage);
+  })
+  pagination.appendChild(prevBtn);
+
+
+
+  // next button
+  const nextBtn=document.createElement('button');
+  nextBtn.textContent="Next";
+  nextBtn.disabled = currentPage === totalPages;  
+  nextBtn.classList.toggle('is-disabled',currentPage===totalPages);
+  nextBtn.addEventListener('click',()=>{
+    if(currentPage<totalPages) renderEventsTable(events,currentPage+1,perPage);
+  })
+  pagination.appendChild(nextBtn)
+
+
+
+
+
+  // num buttons
+}
