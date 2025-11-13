@@ -86,8 +86,13 @@ for(let i=0; i<variantRows.length; i++){
     const row=variantRows[i];
     const name=row.querySelector(".variant-row__name").value.trim();
     const price = parseFloat(row.querySelector(".variant-row__value").value) || 0;
+    const value=parseInt(row.querySelector(".variant-row__value").value) || 0;
+    const qty=parseInt(row.querySelector(".variant-row__qty").value) || 1;
+    const type=row.querySelector(".variant-row__type").value
+    
 
-    variants.push({name,price});
+    variants.push({name,price,value,qty,type});
+    
 }
 
 
@@ -105,12 +110,15 @@ for(let i=0; i<variantRows.length; i++){
   events.push(newEvent);
 
   const convert=JSON.stringify(events);
-  localStorage.setItem(events,convert);
+  localStorage.setItem('events',convert);
 
   console.log("✅ Event created:", newEvent);
-
-// reseting the form
+  // reseting the form
   e.target.reset();
+ 
+
+
+
 }
 
 document.getElementById('event-form').addEventListener('submit', handleFormSubmit)
@@ -128,7 +136,6 @@ function addVariantRow(){
     // cloning
     const newRow = template.cloneNode(true);
 
-
     const inputs = newRow.querySelectorAll('input');
     inputs.forEach(input => input.value = '');    // clearing the inputs
 
@@ -140,6 +147,7 @@ function addVariantRow(){
 
 
     variantList.appendChild(newRow);
+
 
 }
 
@@ -156,3 +164,46 @@ document.getElementById('btn-add-variant').addEventListener('click', addVariantR
 // ============================================
 //       EVENTS LIST SCREEN
 // ============================================
+
+function renderEventsTable(eventList,page = 1, perPage = 10) {
+  const tbody = document.querySelector('#events-table tbody');
+  tbody.innerHTML = '';    // to clear previous rows
+  console.log("test")
+    // pagination 
+
+  const start = (page - 1) * perPage;
+  const end = start + perPage;
+
+  const paginatedEvents = eventList.filter((_, index) => {
+    return index >= start && index < end;
+  });
+
+console.log(paginatedEvents)
+  paginatedEvents.forEach((event, index) => {
+    const tr = document.createElement('tr');
+    tr.classList.add('table__row');
+    tr.dataset.eventId = event.id;      // storing the event’s ID in the DOM
+    tr.innerHTML += `
+      <td>${start + index + 1}</td>
+      <td>${event.title}</td>
+      <td>${event.seats}</td>
+      <td>$${event.price.toFixed(2)}</td>
+      <td><span class="badge">${event.variants ? event.variants.length : 0}</span></td>
+      <td>
+        <button class="btn btn--small" data-action="details" data-event-id="${event.id}">Details</button>
+        <button class="btn btn--small" data-action="edit" data-event-id="${event.id}">Edit</button>
+        <button class="btn btn--danger btn--small" data-action="archive" data-event-id="${event.id}">Delete</button>
+      </td>
+    `;
+
+    tbody.appendChild(tr);
+  });
+
+} 
+
+document.addEventListener('DOMContentLoaded',()=>{
+  // console.log(events);
+  events = JSON.parse(localStorage.getItem('events'));
+  renderEventsTable(events)
+})
+
