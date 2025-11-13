@@ -365,6 +365,40 @@ function editEvent(eventId){
 }
 
 
-// function archiveEvent(eventId) {
-  
-// }
+function archiveEvent(eventId) {
+  let archivedEvent = null;
+
+  //  retirage d'evenement en meme temps qu’on verifie s’il existe
+  const newEvents = events.filter(ev => {
+    if (ev.id == eventId) {
+      archivedEvent = ev;   // event trouvé 
+      return false;         // donc on ne le garde pas
+    }
+    return true;            // on garde les autres
+  });
+
+  //  if ntg was found
+  if (!archivedEvent) {
+    alert("Événement introuvable");
+    return;
+  }
+
+  //  archiver
+  archive.push(archivedEvent);
+
+  // updating the list
+  events = newEvents;
+
+  // sauvegarder en localStorage
+  localStorage.setItem("events", JSON.stringify(events));
+  localStorage.setItem("archive", JSON.stringify(archive));
+
+  renderEventsTable(events);
+
+  alert("Événement archivé !");
+}
+
+
+
+
+
