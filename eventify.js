@@ -400,5 +400,58 @@ function archiveEvent(eventId) {
 
 
 
+// ============================================
+//          SEARCH & SORT
+// ============================================
+function searchEvents(query) {
+  const qry = query.toLowerCase().trim();
+  return events.filter(e => e.title.toLowerCase().includes(qry));
+}
+
+
+function sortEvents(eventList, sortType) {
+  const sorted = [...eventList]; // cree une autre copie pour ne pas modifier l'original
+  const n = sorted.length;
+
+  for (let i = 0; i < n - 1; i++) {
+    for (let j = 0; j < n - 1 - i; j++) {
+      let swap = false;
+
+      switch (sortType) {
+        case "title-asc":
+          if (sorted[j].title.toLowerCase() > sorted[j + 1].title.toLowerCase()) swap = true;
+          break;
+        case "title-desc":
+          if (sorted[j].title.toLowerCase() < sorted[j + 1].title.toLowerCase()) swap = true;
+          break;
+        case "price-asc":
+          if (sorted[j].price > sorted[j + 1].price) swap = true;
+          break;
+        case "price-desc":
+          if (sorted[j].price < sorted[j + 1].price) swap = true;
+          break;
+        case "seats-asc":
+          if (sorted[j].seats > sorted[j + 1].seats) swap = true;
+          break;
+        default:
+          console.warn("Sort type non reconnu :", sortType);
+      }
+
+      if (swap) {
+        const temp = sorted[j];
+        sorted[j] = sorted[j + 1];
+        sorted[j + 1] = temp;
+      }
+    }
+  }
+
+  return sorted;
+}
+
+// Listen to search and sort changes
+document.getElementById('search-events').addEventListener('input', (e) => { 
+    const filtered = searchEvents(e.target.value); 
+    renderEventsTable(filtered); 
+});
 
 
