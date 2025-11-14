@@ -462,3 +462,33 @@ document.getElementById("sort-events").addEventListener("change", (e)=> {
 })
 
 
+
+// ============================================
+//       ARCHIVE SCREEN
+// ============================================
+// 
+function renderArchiveTable(archivedList) {
+  
+  const tbody = document.querySelector("#archive-table");
+  tbody.innerHTML = "";
+
+  archivedList.forEach(event => {
+    const row = document.createElement("tr");
+    row.dataset.eventId = event.id;
+
+    row.innerHTML = `
+      <td>${event.title}</td>
+      <td>${event.description}</td>
+      <td>${event.seats}</td>
+      <td>${event.price}</td>
+      <td>${event.variants}</td>
+      <td>
+        <button class="btn btn-restore" data-action="restore" data-id="${event.id}">
+          Restore
+        </button>
+      </td>
+    `;
+
+    tbody.appendChild(row);
+  });
+}
