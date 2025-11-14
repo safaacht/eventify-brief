@@ -468,7 +468,7 @@ document.getElementById("sort-events").addEventListener("change", (e)=> {
 // ============================================
 // 
 function renderArchiveTable(archivedList) {
-  
+
   const tbody = document.querySelector("#archive-table");
   tbody.innerHTML = "";
 
@@ -492,3 +492,51 @@ function renderArchiveTable(archivedList) {
     tbody.appendChild(row);
   });
 }
+
+
+
+function restoreEvent(eventId) {
+
+  eventId = Number(eventId);
+
+  let restoredEvent = null;
+  let indexToRemove = -1;
+
+  //  chercher l'evenement dans archive par son id
+  for (let i = 0; i < archive.length; i++) {
+    if (archive[i].id === eventId) {
+      restoredEvent = archive[i];
+      indexToRemove = i;
+      break; 
+    }
+  }
+
+  if (!restoredEvent) return; 
+
+  
+  events.push(restoredEvent);    // restoring to event
+
+  // garder uniquement les evenements dont l’id est different de eventId
+  archive = archive.filter(event => event.id !== eventId);
+
+
+  
+  saveData();   // sauvgarder en localStorage
+  renderEventsTable(events);
+  renderArchiveTable(archive);
+}
+
+
+function saveData() {
+  localStorage.setItem("events", JSON.stringify(events));
+  localStorage.setItem("archive", JSON.stringify(archive));
+}
+
+
+//delegation
+document.addEventListener("click", function (e) {
+  if (e.target.dataset.action === "restore") {
+    const id = e.target.dataset.id;
+    restoreEvent(id);
+  }
+});
