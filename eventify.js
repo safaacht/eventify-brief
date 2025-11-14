@@ -410,7 +410,7 @@ function searchEvents(query) {
 
 
 function sortEvents(eventList, sortType) {
-  const sorted = [...eventList]; // cree une autre copie pour ne pas modifier l'original
+  const sorted = [...eventList]; // cree une autre copie pour ne pas modifier l'original(spreed)
   const n = sorted.length;
 
   for (let i = 0; i < n - 1; i++) {
@@ -453,5 +453,12 @@ document.getElementById('search-events').addEventListener('input', (e) => {
     const filtered = searchEvents(e.target.value); 
     renderEventsTable(filtered); 
 });
+
+
+document.getElementById("sort-events").addEventListener("change", (e)=> {
+ events =  sortEvents(events, e.target.value)
+ renderEventsTable(sordtedArr);
+  
+})
 
 
