@@ -533,7 +533,7 @@ function saveData() {
 }
 
 
-//delegation
+//delegation des evenement
 document.addEventListener("click", function (e) {
   if (e.target.dataset.action === "restore") {
     const id = e.target.dataset.id;
