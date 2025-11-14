@@ -549,4 +549,17 @@ document.addEventListener("click", function (e) {
 // ============================================
 
 
+function renderStats() {
+// calculating from events array
+    const totalEvents = events.length;
+    const totalSeats = events.reduce((sum, e) => sum + e.seats, 0);
+    const totalPrice = events.reduce((sum, e) => sum + e.price * e.seats, 0);
+    
+    // Update DOM
+    document.getElementById('stat-total-events').textContent = totalEvents;
+    document.getElementById('stat-total-seats').textContent = totalSeats;
+    document.getElementById('stat-total-price').textContent = '$' + totalPrice.toFixed(2);
+}
+
+
 
