@@ -207,7 +207,10 @@ console.log(paginatedEvents)
 document.addEventListener('DOMContentLoaded',()=>{
   // console.log(events);
   events = JSON.parse(localStorage.getItem('events'));
+  archive = JSON.parse(localStorage.getItem('archive'));
   renderEventsTable(events)
+   renderStats();
+   renderArchiveTable(archive)
 })
 
 
@@ -254,20 +257,23 @@ document.addEventListener('DOMContentLoaded',()=>{
 function handleTableActionClick(e){
   // Checking if e.target is [data-action]
   const actionBtn=e.target.closest('[data-action]');
+  console.log(actionBtn);
+  
   if(!actionBtn) return;  // return if it's not an action btn
 
   const action=actionBtn.getAttribute('data-action');
 
   // recuperation de l’id d'evenement
   const eventId=actionBtn.closest('[data-event-id]')?.getAttribute('data-event-id'); 
-  
+   console.log(action);
+   
   if (action === 'details') {
     showDetails(eventId);
    } 
    else if (action === 'edit') {
     editEvent(eventId);
    } 
-   else if (action === 'delete') {
+   else if (action === 'archive') {
     archiveEvent(eventId);
   }
   
@@ -368,16 +374,21 @@ function editEvent(eventId){
 function archiveEvent(eventId) {
   let archivedEvent = null;
 
-  //  retirage d'evenement en meme temps qu’on verifie s’il existe
-  const newEvents = events.filter(ev => {
-    if (ev.id == eventId) {
-      archivedEvent = ev;   // event trouvé 
-      return false;         // donc on ne le garde pas
-    }
-    return true;            // on garde les autres
-  });
+  //  rsearching
+  const newEvents = events.filter((e)=>{
 
-  //  if ntg was found
+    if(+e.id === +eventId){
+      archivedEvent = e;
+      return false;
+    }else {
+      return true;
+    }
+ 
+    
+  });
+ 
+
+  //  if ntg w as found
   if (!archivedEvent) {
     alert("Événement introuvable");
     return;
@@ -393,9 +404,13 @@ function archiveEvent(eventId) {
   localStorage.setItem("events", JSON.stringify(events));
   localStorage.setItem("archive", JSON.stringify(archive));
 
+  
   renderEventsTable(events);
 
   alert("Événement archivé !");
+  renderStats()
+  renderArchiveTable(archive);   // rendring the new archive liste
+  
 }
 
 
@@ -420,6 +435,7 @@ function sortEvents(eventList, sortType) {
       switch (sortType) {
         case "title-asc":
           if (sorted[j].title.toLowerCase() > sorted[j + 1].title.toLowerCase()) swap = true;
+          
           break;
         case "title-desc":
           if (sorted[j].title.toLowerCase() < sorted[j + 1].title.toLowerCase()) swap = true;
@@ -469,7 +485,7 @@ document.getElementById("sort-events").addEventListener("change", (e)=> {
 // 
 function renderArchiveTable(archivedList) {
 
-  const tbody = document.querySelector("#archive-table");
+  const tbody = document.querySelector(".archive_tbody");
   tbody.innerHTML = "";
 
   archivedList.forEach(event => {
@@ -477,11 +493,13 @@ function renderArchiveTable(archivedList) {
     row.dataset.eventId = event.id;
 
     row.innerHTML = `
+      <td>${event.id}</td>
       <td>${event.title}</td>
       <td>${event.description}</td>
       <td>${event.seats}</td>
       <td>${event.price}</td>
-      <td>${event.variants}</td>
+      <td><span class="badge">${event.variants ? event.variants.length : 0}</span></td>
+      <td>
       <td>
         <button class="btn btn-restore" data-action="restore" data-id="${event.id}">
           Restore
@@ -552,15 +570,24 @@ document.addEventListener("click", function (e) {
 function renderStats() {
 // calculating from events array
     const totalEvents = events.length;
-    const totalSeats = events.reduce((sum, e) => sum + e.seats, 0);
-    const totalPrice = events.reduce((sum, e) => sum + e.price * e.seats, 0);
-    
-    // updating the  DOM
     document.getElementById('stat-total-events').textContent = totalEvents;
+
+    let totalSeats = 0
+    let totalPrice = 0
+   console.log("test");
+     
+    for(let i=0 ;i< totalEvents ; i++){
+    
+      
+      totalSeats += events[i].seats;
+      totalPrice += events[i].price;
+      
+    }
+   
+    // updating the  DOM
     document.getElementById('stat-total-seats').textContent = totalSeats;
     document.getElementById('stat-total-price').textContent = '$' + totalPrice.toFixed(2);
     // 
 }
-
 
 
