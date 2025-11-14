@@ -540,3 +540,13 @@ document.addEventListener("click", function (e) {
     restoreEvent(id);
   }
 });
+
+
+
+
+// ============================================
+//      STATISTICS SCREEN
+// ============================================
+
+
+
